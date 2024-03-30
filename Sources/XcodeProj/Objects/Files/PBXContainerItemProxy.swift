@@ -12,6 +12,14 @@ public final class PBXContainerItemProxy: PBXObject {
         case project(PBXProject) /// Project where the proxied object is located in
         case fileReference(PBXFileReference) /// File reference to .xcodeproj where the proxied object is located
         case unknownObject(PBXObject?) /// This is used only for reading from corrupted projects. Don't use it.
+
+        public var uuid: String? {
+          switch self {
+          case let .project(project): return project.uuid
+          case let .fileReference(fileReference): return fileReference.uuid
+          case let .unknownObject(pbxObject): return pbxObject?.uuid
+          }
+        }
     }
 
     enum RemoteGlobalIDReference: Equatable {
@@ -42,7 +50,7 @@ public final class PBXContainerItemProxy: PBXObject {
         case object(PBXObject)
         case string(String)
 
-        var uuid: String {
+        public var uuid: String {
             switch self {
             case let .object(object): return object.uuid
             case let .string(string): return string
